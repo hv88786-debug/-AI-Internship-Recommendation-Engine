@@ -1,0 +1,2063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>PM Internship — AI Placement Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --primary: #0F4C81;
+    --accent: #FF9933;
+    --emerald: #138808;
+    --sky: #0ea5e9;
+    --slate-50: #f8fafc;
+    --slate-100: #f1f5f9;
+    --slate-200: #e2e8f0;
+    --slate-300: #cbd5e1;
+    --slate-500: #64748b;
+    --slate-700: #334155;
+    --slate-900: #0f172a;
+    --amber-50: #fffbeb;
+    --amber-100: #fef3c7;
+    --amber-800: #92400e;
+    --emerald-50: #ecfdf5;
+    --emerald-700: #15803d;
+    --red-50: #fef2f2;
+    --red-700: #b91c1c;
+    --indigo-50: #eef2ff;
+    --indigo-700: #4338ca;
+    --violet-50: #f5f3ff;
+    --violet-700: #6d28d9;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+    color: var(--slate-900);
+  }
+  body { background: var(--slate-50); min-height: 100vh; }
+  button, input, textarea, select { font: inherit; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* NAV */
+  header {
+    position: sticky; top: 0; z-index: 50;
+    border-bottom: 1px solid rgba(226,232,240,.7);
+    background: rgba(255,255,255,.92);
+    backdrop-filter: blur(12px);
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem;
+  }
+  .nav-logo { display: flex; align-items: center; gap: .75rem; cursor: pointer; }
+  .logo-mark {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--primary); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .85rem; font-weight: 700; letter-spacing: .05em;
+  }
+  .logo-text p:first-child { font-size: .7rem; font-weight: 700; letter-spacing: .24em; color: var(--accent); text-transform: uppercase; }
+  .logo-text p:last-child { font-size: 1rem; font-weight: 600; }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { font-size: .875rem; font-weight: 500; color: var(--slate-700); cursor: pointer; transition: color .15s; }
+  .nav-links a:hover { color: var(--primary); }
+  .btn-nav {
+    font-size: .875rem; font-weight: 600; color: #fff;
+    background: var(--primary); border: none; border-radius: 10px;
+    padding: .625rem 1rem; cursor: pointer; transition: background .15s;
+  }
+  .btn-nav:hover { background: var(--slate-900); }
+
+  /* PAGES */
+  .page { display: none; }
+  .page.active { display: block; }
+  main { max-width: 1280px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+
+  /* CARDS */
+  .card {
+    background: #fff; border: 1px solid var(--slate-200);
+    border-radius: 24px; padding: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,.06);
+  }
+  .card-lg { padding: 2rem 2.5rem; }
+
+  /* HERO BANNER */
+  .hero-banner {
+    border-radius: 24px;
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
+    padding: 2.5rem; color: #fff;
+    display: flex; align-items: center; justify-content: space-between; gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .hero-eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: #93c5fd; }
+  .hero-banner h1 { margin-top: .75rem; font-size: clamp(1.75rem, 3vw, 2.25rem); font-weight: 600; }
+  .hero-banner p { margin-top: .5rem; font-size: .9rem; color: #cbd5e1; max-width: 520px; }
+  .hero-avatar {
+    display: flex; align-items: center; gap: .75rem;
+    background: rgba(255,255,255,.1); border-radius: 16px; padding: .75rem;
+    backdrop-filter: blur(6px);
+  }
+  .avatar-circle {
+    width: 56px; height: 56px; border-radius: 14px;
+    background: var(--accent); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700;
+  }
+  .avatar-info p:first-child { font-weight: 600; }
+  .avatar-info p:last-child { font-size: .85rem; color: #cbd5e1; }
+
+  /* STAT CARDS */
+  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+  .stat-card {
+    background: #fff; border: 1px solid var(--slate-200);
+    border-radius: 24px; padding: 1.5rem;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+  .stat-top { display: flex; align-items: center; justify-content: space-between; }
+  .stat-label { font-size: .85rem; color: var(--slate-500); }
+  .stat-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .stat-value { font-size: 2rem; font-weight: 700; margin-top: 1rem; color: var(--slate-900); }
+  .stat-sub { font-size: .75rem; margin-top: .5rem; }
+  .badge-green { display: inline-block; background: var(--emerald-50); color: var(--emerald-700); border-radius: 999px; padding: .2rem .65rem; }
+  .badge-blue { display: inline-block; background: #eff6ff; color: #1d4ed8; border-radius: 999px; padding: .2rem .65rem; }
+  .badge-amber { display: inline-block; background: var(--amber-50); color: #b45309; border-radius: 999px; padding: .2rem .65rem; }
+  .badge-red { display: inline-block; background: var(--red-50); color: var(--red-700); border-radius: 999px; padding: .2rem .65rem; }
+
+  /* SECTION HEADERS */
+  .section-eyebrow { font-size: .7rem; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--accent); }
+  .section-title { margin-top: .5rem; font-size: 1.75rem; font-weight: 700; color: var(--primary); }
+  .section-sub { margin-top: .5rem; color: var(--slate-500); font-size: .9rem; }
+
+  /* BUTTONS */
+  .btn-primary {
+    background: var(--primary); color: #fff; border: none; border-radius: 12px;
+    padding: .75rem 1.25rem; font-size: .875rem; font-weight: 600;
+    cursor: pointer; transition: background .15s; display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-primary:hover { background: var(--slate-900); }
+  .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
+  .btn-ghost {
+    background: transparent; color: var(--primary); border: 1.5px solid var(--primary);
+    border-radius: 12px; padding: .65rem 1.1rem; font-size: .875rem; font-weight: 600;
+    cursor: pointer; transition: all .15s;
+  }
+  .btn-ghost:hover { background: var(--primary); color: #fff; }
+  .btn-sm { padding: .45rem .9rem; font-size: .8rem; }
+
+  /* SKILL TAGS */
+  .tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+  .tag { border-radius: 999px; padding: .3rem .85rem; font-size: .8rem; font-weight: 500; }
+  .tag-blue { background: var(--slate-100); color: var(--slate-700); }
+  .tag-green { background: var(--emerald-50); color: var(--emerald-700); }
+  .tag-amber { background: var(--amber-100); color: var(--amber-800); }
+  .tag-indigo { background: var(--indigo-50); color: var(--indigo-700); }
+
+  /* PROGRESS BAR */
+  .progress-track { height: 10px; background: var(--slate-200); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--primary); border-radius: 999px; transition: width .5s ease; }
+  .progress-fill.green { background: var(--emerald); }
+  .progress-fill.accent { background: var(--accent); }
+
+  /* UPLOAD ZONE */
+  .upload-zone {
+    border: 2px dashed var(--slate-300); border-radius: 24px;
+    padding: 3rem 2rem; text-align: center; cursor: pointer;
+    transition: border-color .2s, background .2s;
+  }
+  .upload-zone:hover, .upload-zone.drag { border-color: var(--primary); background: #eff6ff; }
+  .upload-icon {
+    width: 64px; height: 64px; border-radius: 16px;
+    background: rgba(15,76,129,.1); color: var(--primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; margin: 0 auto;
+  }
+  .upload-zone h3 { margin-top: 1rem; font-size: 1.25rem; font-weight: 600; }
+  .upload-zone p { margin-top: .4rem; font-size: .875rem; color: var(--slate-500); }
+
+  /* FILE SELECTED */
+  .file-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--slate-50); border: 1px solid var(--slate-200);
+    border-radius: 16px; padding: 1rem;
+  }
+  .file-icon-wrap {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: rgba(15,76,129,.1); color: var(--primary);
+    display: flex; align-items: center; justify-content: center; font-size: 1.4rem;
+  }
+
+  /* PROCESSING STEPS */
+  .step-bar { margin-top: 1rem; }
+  .step-row { display: flex; align-items: center; justify-content: space-between; font-size: .875rem; color: var(--slate-500); }
+  .step-dots { display: flex; gap: .35rem; margin-top: .5rem; }
+  .step-dot { flex: 1; height: 8px; border-radius: 999px; background: var(--slate-200); transition: background .3s; }
+  .step-dot.active { background: var(--primary); }
+
+  /* ALERTS */
+  .alert { border-radius: 12px; padding: .75rem 1rem; font-size: .875rem; margin-top: 1rem; }
+  .alert-error { background: var(--red-50); color: var(--red-700); }
+  .alert-success { background: var(--emerald-50); color: var(--emerald-700); }
+  .alert-info { background: #eff6ff; color: #1d4ed8; }
+
+  /* MATCH CIRCLE */
+  .match-ring { position: relative; display: flex; align-items: center; justify-content: center; }
+  .match-ring span { position: absolute; font-size: 1.1rem; font-weight: 700; color: var(--slate-900); }
+
+  /* INTERNSHIP CARD */
+  .internship-card {
+    background: #fff; border: 1px solid var(--slate-200);
+    border-radius: 24px; padding: 1.5rem;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .internship-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
+  .internship-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .internship-title { font-size: 1.4rem; font-weight: 700; }
+  .internship-company { font-size: .875rem; color: var(--slate-500); margin-top: .25rem; }
+  .internship-body { display: grid; gap: 1.5rem; grid-template-columns: 1.2fr .8fr; margin-top: 1.5rem; }
+  @media (max-width: 768px) { .internship-body { grid-template-columns: 1fr; } }
+  .skill-box { background: var(--slate-50); border-radius: 16px; padding: 1rem; }
+  .skill-box h4 { font-size: .8rem; font-weight: 700; color: var(--slate-700); }
+  .skill-box.amber { background: var(--amber-50); }
+  .skills-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  @media (max-width: 640px) { .skills-pair { grid-template-columns: 1fr; } }
+
+  /* APPLICATION STATUS */
+  .status-track { margin-top: 1.5rem; }
+  .status-stages { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; }
+  .stage-pill { border-radius: 999px; padding: .3rem .85rem; font-size: .75rem; font-weight: 600; background: var(--slate-100); color: var(--slate-500); }
+  .stage-pill.done { background: var(--primary); color: #fff; }
+
+  /* FORMS */
+  .form-grid { display: grid; gap: 1.25rem; }
+  .form-row-2 { grid-template-columns: 1fr 1fr; }
+  @media (max-width: 640px) { .form-row-2 { grid-template-columns: 1fr; } }
+  .form-group { display: flex; flex-direction: column; gap: .5rem; }
+  .form-label { font-size: .85rem; font-weight: 600; color: var(--slate-700); }
+  .form-input, .form-textarea, .form-select {
+    border: 1.5px solid var(--slate-200); border-radius: 12px;
+    padding: .7rem .9rem; font-size: .9rem; color: var(--slate-900);
+    background: #fff; transition: border-color .15s;
+    width: 100%;
+  }
+  .form-input:focus, .form-textarea:focus, .form-select:focus {
+    outline: none; border-color: var(--primary);
+  }
+  .form-textarea { resize: vertical; min-height: 80px; }
+
+  /* GRID LAYOUTS */
+  .two-col { display: grid; grid-template-columns: 1.2fr .8fr; gap: 1.5rem; }
+  @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+  .three-info { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 700px) { .three-info { grid-template-columns: 1fr; } }
+
+  /* SECTION SPACING */
+  .mt-6 { margin-top: 1.5rem; }
+  .mt-4 { margin-top: 1rem; }
+  .mt-8 { margin-top: 2rem; }
+  .mt-2 { margin-top: .5rem; }
+
+  /* PROFILE COMPLETION */
+  .completion-bar-section { background: var(--slate-50); border-radius: 16px; padding: 1rem; }
+  .completion-row { display: flex; justify-content: space-between; font-size: .85rem; color: var(--slate-500); }
+
+  /* HOME PAGE */
+  .home-hero {
+    text-align: center; padding: 5rem 1rem;
+    background: linear-gradient(160deg, #eff6ff 0%, #fff 60%);
+    border-radius: 32px; margin-top: 0;
+  }
+  .home-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; color: var(--primary); line-height: 1.1; }
+  .home-hero h1 span { color: var(--accent); }
+  .home-hero p { margin-top: 1rem; font-size: 1.1rem; color: var(--slate-500); max-width: 560px; margin-left: auto; margin-right: auto; }
+  .home-btns { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap; }
+  .features-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .feature-card {
+    background: #fff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .feature-icon { font-size: 2rem; }
+  .feature-card h3 { margin-top: .75rem; font-size: 1rem; font-weight: 700; }
+  .feature-card p { margin-top: .5rem; font-size: .85rem; color: var(--slate-500); }
+
+  /* QUICK ACTIONS */
+  .quick-link {
+    display: flex; align-items: center; justify-content: space-between;
+    border: 1.5px solid var(--slate-200); border-radius: 16px; padding: 1rem;
+    cursor: pointer; transition: border-color .15s, background .15s;
+    font-size: .875rem; font-weight: 600; color: var(--slate-700);
+  }
+  .quick-link:hover { border-color: var(--primary); background: var(--slate-50); }
+  .quick-link-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--slate-100); display: flex; align-items: center; justify-content: center; }
+
+  /* SKILL GAP */
+  .skill-gap-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 640px) { .skill-gap-row { grid-template-columns: 1fr; } }
+  .gap-card { background: #fff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 1.25rem; }
+  .gap-card h3 { font-size: 1rem; font-weight: 700; }
+  .gap-card .subtitle { font-size: .8rem; color: var(--slate-500); margin-top: .25rem; }
+  .skill-progress-row { display: flex; align-items: center; gap: .75rem; margin-top: .75rem; }
+  .skill-progress-label { font-size: .8rem; width: 110px; flex-shrink: 0; color: var(--slate-700); }
+  .skill-progress-bar { flex: 1; height: 8px; background: var(--slate-100); border-radius: 999px; overflow: hidden; }
+  .skill-progress-fill { height: 100%; border-radius: 999px; }
+  .skill-progress-pct { font-size: .75rem; color: var(--slate-500); width: 36px; text-align: right; }
+
+  /* SPINNER */
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .spinner { width: 18px; height: 18px; border: 2.5px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; display: inline-block; }
+
+  /* INTERNSHIP LISTING */
+  .internship-listing-card {
+    background: #fff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 1.5rem;
+    transition: transform .2s, box-shadow .2s; box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .internship-listing-card:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,.09); }
+  .listing-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 1rem; }
+  .listing-meta { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .75rem; }
+  .meta-tag { font-size: .78rem; background: var(--slate-100); color: var(--slate-700); border-radius: 8px; padding: .25rem .65rem; font-weight: 500; }
+  .listing-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; flex-wrap: wrap; gap: .75rem; }
+  .stipend-badge { font-size: .85rem; font-weight: 700; color: var(--emerald-700); }
+
+  /* TOAST */
+  #toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem; z-index: 9999;
+    background: var(--slate-900); color: #fff; border-radius: 14px;
+    padding: .85rem 1.25rem; font-size: .875rem; font-weight: 500;
+    box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    transform: translateY(120%); transition: transform .3s ease;
+    max-width: 340px;
+  }
+  #toast.show { transform: translateY(0); }
+
+  /* RESET BUTTON */
+  .reset-btn {
+    font-size: .78rem; color: var(--red-700); background: var(--red-50);
+    border: none; border-radius: 8px; padding: .35rem .75rem; cursor: pointer;
+  }
+  .reset-btn:hover { background: #fecaca; }
+
+  /* ===== AI PROCESSING OVERLAY ===== */
+  #ai-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    background: rgba(15,23,42,.72); backdrop-filter: blur(6px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  #ai-overlay.active { opacity: 1; pointer-events: all; }
+  .ai-overlay-box {
+    background: #fff; border-radius: 28px; padding: 2.5rem;
+    max-width: 480px; width: 90%; text-align: center;
+    box-shadow: 0 32px 80px rgba(0,0,0,.25);
+  }
+  .ai-brain-anim {
+    width: 80px; height: 80px; border-radius: 20px;
+    background: linear-gradient(135deg, var(--primary), #1e3a8a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2.2rem; margin: 0 auto;
+    animation: pulse-brain 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse-brain {
+    0%,100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(15,76,129,.4); }
+    50% { transform: scale(1.06); box-shadow: 0 0 0 14px rgba(15,76,129,0); }
+  }
+  .ai-scan-bar {
+    height: 6px; background: var(--slate-100); border-radius: 999px;
+    overflow: hidden; margin-top: 1.25rem;
+  }
+  .ai-scan-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--primary), var(--sky));
+    border-radius: 999px; transition: width .4s ease;
+  }
+  .ai-step-list { margin-top: 1rem; text-align: left; }
+  .ai-step-item {
+    display: flex; align-items: center; gap: .65rem;
+    font-size: .82rem; color: var(--slate-500); padding: .4rem 0;
+    border-bottom: 1px solid var(--slate-100); transition: color .3s;
+  }
+  .ai-step-item.done { color: var(--emerald-700); }
+  .ai-step-item.active { color: var(--primary); font-weight: 600; }
+  .ai-step-dot {
+    width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+    background: var(--slate-200); display: flex; align-items: center; justify-content: center;
+    font-size: .7rem; transition: background .3s;
+  }
+  .ai-step-item.done .ai-step-dot { background: var(--emerald); color: #fff; }
+  .ai-step-item.active .ai-step-dot { background: var(--primary); animation: spin .8s linear infinite; color: #fff; }
+  .ai-dots-row { display: flex; justify-content: center; gap: .4rem; margin-top: 1rem; }
+  .ai-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--slate-200); }
+  .ai-dot.live { background: var(--primary); animation: dot-bounce .9s ease-in-out infinite; }
+  .ai-dot:nth-child(2) { animation-delay: .15s; }
+  .ai-dot:nth-child(3) { animation-delay: .3s; }
+  @keyframes dot-bounce { 0%,80%,100% { transform: scale(1); } 40% { transform: scale(1.5); } }
+
+  /* ===== AI RESUME ANALYSIS MODAL ===== */
+  #resume-modal {
+    position: fixed; inset: 0; z-index: 900;
+    background: rgba(15,23,42,.6); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity .3s;
+  }
+  #resume-modal.active { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: #fff; border-radius: 28px;
+    max-width: 680px; width: 95%; max-height: 90vh; overflow-y: auto;
+    box-shadow: 0 32px 80px rgba(0,0,0,.22);
+    animation: modal-in .3s ease;
+  }
+  @keyframes modal-in { from { transform: translateY(24px) scale(.97); opacity: 0; } to { transform: none; opacity: 1; } }
+  .modal-header {
+    background: linear-gradient(135deg, var(--primary), #1e3a8a);
+    border-radius: 28px 28px 0 0; padding: 2rem;
+    color: #fff; position: relative;
+  }
+  .modal-close {
+    position: absolute; top: 1.25rem; right: 1.25rem;
+    width: 36px; height: 36px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,.2); color: #fff; font-size: 1.1rem;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+  }
+  .modal-close:hover { background: rgba(255,255,255,.35); }
+  .modal-body { padding: 2rem; }
+  .modal-score-ring { display: flex; align-items: center; gap: 1.5rem; margin-top: 1.5rem; }
+  .modal-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .modal-metric-box {
+    background: var(--slate-50); border-radius: 16px; padding: 1rem;
+    border: 1px solid var(--slate-200);
+  }
+  .modal-metric-label { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; color: var(--slate-500); }
+  .modal-metric-value { font-size: 1.4rem; font-weight: 800; color: var(--primary); margin-top: .25rem; }
+  .modal-section-title { font-size: .85rem; font-weight: 700; color: var(--slate-700); margin-top: 1.25rem; }
+
+  /* ===== PROFILE STRENGTH METER ===== */
+  .profile-strength-wrap { display: flex; align-items: center; gap: 1.5rem; }
+  .strength-ring { position: relative; flex-shrink: 0; }
+  .strength-ring span {
+    position: absolute; inset: 0; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; font-weight: 800;
+    font-size: 1.1rem; color: var(--primary);
+  }
+  .strength-ring span small { font-size: .62rem; font-weight: 600; color: var(--slate-500); margin-top: .1rem; }
+  .strength-levels { display: flex; flex-direction: column; gap: .4rem; flex: 1; }
+  .strength-row { display: flex; align-items: center; gap: .65rem; font-size: .78rem; }
+  .strength-bar-track { flex: 1; height: 6px; background: var(--slate-100); border-radius: 999px; overflow: hidden; }
+  .strength-bar-fill { height: 100%; border-radius: 999px; transition: width .7s ease; }
+
+  /* ===== WHY RECOMMENDED SECTION ===== */
+  .why-rec-section {
+    background: linear-gradient(135deg, #eff6ff, #f0fdf4);
+    border: 1px solid #bfdbfe; border-radius: 16px; padding: 1rem 1.25rem;
+    margin-top: 1rem;
+  }
+  .why-rec-title { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .2em; color: var(--primary); }
+  .why-rec-items { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .65rem; }
+  .why-rec-pill {
+    display: flex; align-items: center; gap: .35rem;
+    background: #fff; border: 1px solid #bfdbfe; border-radius: 999px;
+    padding: .3rem .75rem; font-size: .78rem; color: var(--primary); font-weight: 500;
+  }
+  .why-rec-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--emerald); }
+
+  /* ===== COMPANY LOGO BADGE ===== */
+  .company-logo-badge {
+    width: 48px; height: 48px; border-radius: 12px;
+    border: 1.5px solid var(--slate-200);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem; font-weight: 800; flex-shrink: 0;
+    background: #fff; color: var(--primary);
+    box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  }
+
+  /* ===== APPLICATION PROGRESS TIMELINE ===== */
+  .app-timeline { margin-top: 1.25rem; position: relative; padding-left: 1.75rem; }
+  .app-timeline::before {
+    content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+    width: 2px; background: var(--slate-200); border-radius: 999px;
+  }
+  .timeline-item { position: relative; padding-bottom: 1.25rem; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-dot {
+    position: absolute; left: -1.75rem; top: 2px;
+    width: 16px; height: 16px; border-radius: 50%;
+    border: 2.5px solid var(--slate-200); background: #fff;
+    transition: all .3s;
+  }
+  .timeline-dot.done { background: var(--primary); border-color: var(--primary); }
+  .timeline-dot.current { background: var(--accent); border-color: var(--accent); animation: pulse-dot 1.5s infinite; }
+  @keyframes pulse-dot {
+    0%,100% { box-shadow: 0 0 0 0 rgba(255,153,51,.4); }
+    50% { box-shadow: 0 0 0 8px rgba(255,153,51,0); }
+  }
+  .timeline-label { font-size: .8rem; font-weight: 700; color: var(--slate-700); }
+  .timeline-label.done { color: var(--primary); }
+  .timeline-label.current { color: var(--accent); }
+  .timeline-date { font-size: .72rem; color: var(--slate-500); margin-top: .1rem; }
+
+  /* ===== SKILL GAP PANEL ENHANCEMENTS ===== */
+  .gap-radar-section { background: #fff; border: 1px solid var(--slate-200); border-radius: 20px; padding: 1.5rem; margin-top: 1rem; }
+  .gap-radar-title { font-size: .85rem; font-weight: 700; color: var(--slate-700); margin-bottom: 1rem; }
+  .learning-path-item {
+    display: flex; align-items: flex-start; gap: .85rem;
+    background: var(--slate-50); border-radius: 12px; padding: .85rem;
+    margin-top: .75rem; border: 1px solid var(--slate-100);
+  }
+  .learning-path-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: .1rem; }
+  .learning-path-text p:first-child { font-size: .82rem; font-weight: 700; color: var(--slate-900); }
+  .learning-path-text p:last-child { font-size: .75rem; color: var(--slate-500); margin-top: .2rem; }
+
+  /* ===== PLATFORM STATS SECTION ===== */
+  .platform-stats {
+    background: linear-gradient(135deg, var(--primary) 0%, #1e3a5f 100%);
+    border-radius: 24px; padding: 2.5rem; margin-top: 3rem; color: #fff;
+  }
+  .platform-stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .pstat-item { text-align: center; }
+  .pstat-num {
+    font-size: 2.2rem; font-weight: 800; color: #fff;
+    display: block;
+  }
+  .pstat-label { font-size: .78rem; color: #93c5fd; margin-top: .25rem; font-weight: 500; }
+  .pstat-icon { font-size: 1.6rem; display: block; margin-bottom: .5rem; }
+  .pstat-divider { width: 1px; background: rgba(255,255,255,.15); border: none; }
+  @media (max-width: 640px) { .pstat-divider { display: none; } }
+
+  /* ===== COUNTER ANIMATION ===== */
+  @keyframes count-up { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  .count-anim { animation: count-up .5s ease forwards; }
+
+  /* ===== ENHANCED INTERNSHIP LISTING CARD ===== */
+  .listing-company-row { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="navigate('home')">
+      <div class="logo-mark">PM</div>
+      <div class="logo-text">
+        <p>PM Internship</p>
+        <p>AI Placement Portal</p>
+      </div>
+    </div>
+    <nav>
+      <ul class="nav-links">
+        <li><a onclick="navigate('home')">Home</a></li>
+        <li><a onclick="navigate('internships')">Internships</a></li>
+        <li><a onclick="navigate('dashboard')">Dashboard</a></li>
+      </ul>
+    </nav>
+    <button class="btn-nav" onclick="navigate('dashboard')">Student Portal</button>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- AI PROCESSING OVERLAY -->
+<div id="ai-overlay">
+  <div class="ai-overlay-box">
+    <div class="ai-brain-anim">🧠</div>
+    <h2 style="margin-top:1.25rem;font-size:1.3rem;font-weight:700;color:var(--slate-900);">AI Engine Running</h2>
+    <p id="ai-overlay-subtitle" style="margin-top:.4rem;font-size:.85rem;color:var(--slate-500);">Scanning your resume for skills and experience...</p>
+    <div class="ai-scan-bar"><div class="ai-scan-fill" id="ai-scan-fill"></div></div>
+    <div class="ai-step-list" id="ai-step-list">
+      <div class="ai-step-item" data-step="0"><div class="ai-step-dot">&#8250;</div><span>Parsing document structure</span></div>
+      <div class="ai-step-item" data-step="1"><div class="ai-step-dot">&#8250;</div><span>Extracting technical skills</span></div>
+      <div class="ai-step-item" data-step="2"><div class="ai-step-dot">&#8250;</div><span>Identifying soft skills and experience</span></div>
+      <div class="ai-step-item" data-step="3"><div class="ai-step-dot">&#8250;</div><span>Computing match scores</span></div>
+      <div class="ai-step-item" data-step="4"><div class="ai-step-dot">&#8250;</div><span>Generating personalised recommendations</span></div>
+    </div>
+    <div class="ai-dots-row">
+      <div class="ai-dot live"></div>
+      <div class="ai-dot live"></div>
+      <div class="ai-dot live"></div>
+    </div>
+  </div>
+</div>
+
+<!-- RESUME ANALYSIS MODAL -->
+<div id="resume-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeResumeModal()">x</button>
+      <p style="font-size:.72rem;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:#93c5fd;">AI Analysis Complete</p>
+      <h2 style="margin-top:.5rem;font-size:1.5rem;font-weight:700;">Resume Intelligence Report</h2>
+      <p style="margin-top:.35rem;font-size:.875rem;color:#cbd5e1;" id="modal-filename">your-resume.pdf</p>
+      <div class="modal-score-ring">
+        <div class="match-ring" style="margin-top:.75rem;">
+          <svg width="88" height="88" style="transform:rotate(-90deg)" id="modal-score-svg">
+            <circle cx="44" cy="44" r="36" stroke="rgba(255,255,255,.2)" stroke-width="9" fill="none"/>
+            <circle cx="44" cy="44" r="36" stroke="#FF9933" stroke-width="9" fill="none"
+              stroke-dasharray="226" stroke-dashoffset="226" stroke-linecap="round" id="modal-score-arc"/>
+          </svg>
+          <span style="color:#fff;font-size:1.15rem;" id="modal-score-text">0%</span>
+        </div>
+        <div>
+          <p style="font-size:1rem;font-weight:700;">Overall Match Score</p>
+          <p style="font-size:.82rem;color:#93c5fd;margin-top:.25rem;" id="modal-score-desc">Calculating your profile strength...</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-metrics">
+        <div class="modal-metric-box">
+          <p class="modal-metric-label">Skills Extracted</p>
+          <p class="modal-metric-value" id="modal-skill-count">0</p>
+          <p style="font-size:.75rem;color:var(--slate-500);">technical and soft</p>
+        </div>
+        <div class="modal-metric-box">
+          <p class="modal-metric-label">Roles Matched</p>
+          <p class="modal-metric-value" id="modal-roles-count">0</p>
+          <p style="font-size:.75rem;color:var(--slate-500);">from 12 listings</p>
+        </div>
+        <div class="modal-metric-box">
+          <p class="modal-metric-label">Top Category</p>
+          <p class="modal-metric-value" id="modal-top-cat" style="font-size:1rem;">--</p>
+          <p style="font-size:.75rem;color:var(--slate-500);">best-fit domain</p>
+        </div>
+        <div class="modal-metric-box">
+          <p class="modal-metric-label">Skills to Add</p>
+          <p class="modal-metric-value" id="modal-missing-count">0</p>
+          <p style="font-size:.75rem;color:var(--slate-500);">for 10-15% boost</p>
+        </div>
+      </div>
+      <p class="modal-section-title">Detected Skills</p>
+      <div class="tags" id="modal-skills-list" style="margin-top:.65rem;"></div>
+      <p class="modal-section-title" style="margin-top:1.25rem;">Suggested Additions</p>
+      <div class="tags" id="modal-missing-list" style="margin-top:.65rem;"></div>
+      <p class="modal-section-title" style="margin-top:1.25rem;">AI Assessment</p>
+      <p id="modal-ai-text" style="margin-top:.65rem;font-size:.875rem;color:var(--slate-600);line-height:1.65;background:var(--slate-50);border-radius:12px;padding:.85rem;border:1px solid var(--slate-200);"></p>
+      <div style="display:flex;gap:.75rem;margin-top:1.75rem;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="closeResumeModal();navigate('recommendations');">View Matches</button>
+        <button class="btn-ghost" onclick="closeResumeModal()">Close Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== HOME PAGE ====== -->
+<div class="page active" id="page-home">
+  <main>
+    <div class="home-hero">
+      <p style="font-size:.8rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);">AI-Powered Placement</p>
+      <h1>Find Internships Matched<br>to <span>Your Skills</span></h1>
+      <p>Upload your resume, let our AI extract your skills, and get personalized internship recommendations — no backend needed.</p>
+      <div class="home-btns">
+        <button class="btn-primary" onclick="navigate('resume')">📄 Upload Resume</button>
+        <button class="btn-ghost" onclick="navigate('internships')">Browse Internships</button>
+      </div>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>AI Skill Extraction</h3>
+        <p>Upload PDF or DOCX. Our engine parses your resume and identifies technical and soft skills automatically.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Smart Recommendations</h3>
+        <p>Internships are ranked by how well your extracted skills match each role's requirements — no guesswork.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3>Real-Time Dashboard</h3>
+        <p>Track applications, view skill gaps, and monitor match scores — all synced via localStorage, persists on refresh.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔒</div>
+        <h3>No Backend Required</h3>
+        <p>Everything runs client-side. Your data stays in your browser. Works completely offline after first load.</p>
+      </div>
+    </div>
+
+    <!-- PLATFORM STATISTICS -->
+    <div class="platform-stats">
+      <div style="text-align:center;">
+        <p style="font-size:.72rem;font-weight:700;letter-spacing:.3em;text-transform:uppercase;color:#93c5fd;">Platform Impact</p>
+        <h2 style="margin-top:.5rem;font-size:1.75rem;font-weight:700;">Trusted by students across India</h2>
+        <p style="margin-top:.5rem;font-size:.9rem;color:#cbd5e1;">Connecting talent to opportunity with AI-first matching since 2024.</p>
+      </div>
+      <div class="platform-stats-grid">
+        <div class="pstat-item">
+          <span class="pstat-icon">🎓</span>
+          <span class="pstat-num count-stat" data-target="12400">0</span>
+          <span class="pstat-label">Students Placed</span>
+        </div>
+        <hr class="pstat-divider">
+        <div class="pstat-item">
+          <span class="pstat-icon">🏢</span>
+          <span class="pstat-num count-stat" data-target="340">0</span>
+          <span class="pstat-label">Partner Companies</span>
+        </div>
+        <hr class="pstat-divider">
+        <div class="pstat-item">
+          <span class="pstat-icon">💼</span>
+          <span class="pstat-num count-stat" data-target="12">0</span>
+          <span class="pstat-label">Active Listings</span>
+        </div>
+        <hr class="pstat-divider">
+        <div class="pstat-item">
+          <span class="pstat-icon">✨</span>
+          <span class="pstat-num count-stat" data-target="94">0</span>
+          <span class="pstat-label">AI Match Accuracy %</span>
+        </div>
+        <hr class="pstat-divider">
+        <div class="pstat-item">
+          <span class="pstat-icon">⚡</span>
+          <span class="pstat-num" style="font-size:2.2rem;font-weight:800;">&lt;30s</span>
+          <span class="pstat-label">Resume Analysis Time</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ====== DASHBOARD ====== -->
+<div class="page" id="page-dashboard">
+  <main>
+    <div class="hero-banner">
+      <div>
+        <p class="hero-eyebrow">Student Portal</p>
+        <h1 id="dash-welcome">Welcome back, Student</h1>
+        <p>Your AI-guided internship readiness dashboard. Upload your resume to see live stats.</p>
+      </div>
+      <div class="hero-avatar">
+        <div class="avatar-circle" id="dash-initials">ST</div>
+        <div class="avatar-info">
+          <p id="dash-name">Student Profile</p>
+          <p id="dash-edu">Education pending</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">AI Match Score</span>
+          <div class="stat-icon" style="background:rgba(15,76,129,.1);color:var(--primary)">✨</div>
+        </div>
+        <div class="stat-value" id="stat-score">0%</div>
+        <div class="stat-sub" id="stat-score-sub"><span class="badge-blue">Awaiting analysis</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Skills Extracted</span>
+          <div class="stat-icon" style="background:var(--emerald-50);color:var(--emerald-700)">🧬</div>
+        </div>
+        <div class="stat-value" id="stat-skills">0</div>
+        <div class="stat-sub" id="stat-skills-sub"><span class="badge-amber">No resume uploaded</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Internship Matches</span>
+          <div class="stat-icon" style="background:var(--amber-50);color:#b45309">💼</div>
+        </div>
+        <div class="stat-value" id="stat-matches">0</div>
+        <div class="stat-sub" id="stat-matches-sub"><span class="badge-amber">Ready to generate</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-top">
+          <span class="stat-label">Applications Submitted</span>
+          <div class="stat-icon" style="background:#e0f2fe;color:#0369a1">📋</div>
+        </div>
+        <div class="stat-value" id="stat-apps">0</div>
+        <div class="stat-sub" id="stat-apps-sub"><span class="badge-blue">No applications yet</span></div>
+      </div>
+    </div>
+
+    <div class="two-col mt-6">
+      <div class="card">
+        <p class="stat-label">Extracted Skills</p>
+        <p style="font-size:1.15rem;font-weight:700;margin-top:.25rem;">AI skill analysis</p>
+        <div class="tags mt-4" id="dash-skills-tags">
+          <span style="color:var(--slate-500);font-size:.875rem;">Upload your resume to extract skills.</span>
+        </div>
+        <div class="skills-pair mt-6">
+          <div class="skill-box">
+            <h4>✅ Strengths</h4>
+            <div class="tags" id="dash-strengths"></div>
+          </div>
+          <div class="skill-box amber">
+            <h4>⚠️ Missing Skills</h4>
+            <div class="tags" id="dash-missing"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <p class="stat-label">Quick actions</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:1rem;">
+          <div class="quick-link" onclick="navigate('resume')">
+            <span style="display:flex;align-items:center;gap:.75rem;">
+              <span class="quick-link-icon">📄</span> Upload new resume
+            </span>
+            <span>→</span>
+          </div>
+          <div class="quick-link" onclick="navigate('recommendations')">
+            <span style="display:flex;align-items:center;gap:.75rem;">
+              <span class="quick-link-icon">🎯</span> View recommendations
+            </span>
+            <span>→</span>
+          </div>
+          <div class="quick-link" onclick="navigate('applications')">
+            <span style="display:flex;align-items:center;gap:.75rem;">
+              <span class="quick-link-icon">📊</span> Track applications
+            </span>
+            <span>→</span>
+          </div>
+          <div class="quick-link" onclick="navigate('profile')">
+            <span style="display:flex;align-items:center;gap:.75rem;">
+              <span class="quick-link-icon">👤</span> Edit profile
+            </span>
+            <span>→</span>
+          </div>
+        </div>
+        <div class="completion-bar-section mt-4">
+          <div class="completion-row">
+            <span>Profile completion</span>
+            <span id="dash-completion-pct">0%</span>
+          </div>
+          <div class="progress-track" style="margin-top:.5rem;">
+            <div class="progress-fill" id="dash-completion-bar" style="width:0%"></div>
+          </div>
+        </div>
+
+        <!-- PROFILE STRENGTH CIRCULAR METER -->
+        <div class="card mt-4" style="padding:1.25rem;">
+          <p class="stat-label" style="margin-bottom:.85rem;">Profile Strength</p>
+          <div class="profile-strength-wrap">
+            <div class="strength-ring">
+              <svg width="90" height="90" style="transform:rotate(-90deg)">
+                <circle cx="45" cy="45" r="36" stroke="var(--slate-100)" stroke-width="9" fill="none"/>
+                <circle cx="45" cy="45" r="36" stroke="var(--primary)" stroke-width="9" fill="none"
+                  stroke-dasharray="226" stroke-dashoffset="226" stroke-linecap="round" id="strength-arc"/>
+              </svg>
+              <span id="strength-pct-label">0%<small>strength</small></span>
+            </div>
+            <div class="strength-levels">
+              <div class="strength-row">
+                <span style="font-size:.72rem;width:60px;color:var(--slate-500);">Profile</span>
+                <div class="strength-bar-track"><div class="strength-bar-fill" id="sbar-profile" style="width:0%;background:var(--primary);"></div></div>
+              </div>
+              <div class="strength-row">
+                <span style="font-size:.72rem;width:60px;color:var(--slate-500);">Resume</span>
+                <div class="strength-bar-track"><div class="strength-bar-fill" id="sbar-resume" style="width:0%;background:var(--emerald);"></div></div>
+              </div>
+              <div class="strength-row">
+                <span style="font-size:.72rem;width:60px;color:var(--slate-500);">Skills</span>
+                <div class="strength-bar-track"><div class="strength-bar-fill" id="sbar-skills" style="width:0%;background:var(--accent);"></div></div>
+              </div>
+              <div class="strength-row">
+                <span style="font-size:.72rem;width:60px;color:var(--slate-500);">Applied</span>
+                <div class="strength-bar-track"><div class="strength-bar-fill" id="sbar-apps" style="width:0%;background:var(--sky);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:1rem;text-align:right;">
+          <button class="reset-btn" onclick="resetDemo()">Reset Demo Data</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ====== RESUME UPLOAD ====== -->
+<div class="page" id="page-resume">
+  <main>
+    <div class="card" style="max-width:900px;margin:0 auto;">
+      <p class="section-eyebrow">Student Resume</p>
+      <h1 class="section-title">Resume Upload</h1>
+      <p class="section-sub">Upload your PDF or DOCX resume. Skills are extracted directly in your browser — no server required.</p>
+
+      <div id="resume-alert" style="display:none" class="alert"></div>
+
+      <div class="two-col mt-6">
+        <div>
+          <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
+            <input type="file" id="file-input" accept=".pdf,.doc,.docx,.txt" style="display:none" onchange="handleFileSelect(event)">
+            <div class="upload-icon">📤</div>
+            <h3>Drop your resume here</h3>
+            <p>or click to browse — PDF, DOCX, DOC, TXT</p>
+          </div>
+
+          <div id="file-row" style="display:none" class="file-row mt-4">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div class="file-icon-wrap">📄</div>
+              <div>
+                <p id="file-name" style="font-weight:600;"></p>
+                <p id="file-size" style="font-size:.85rem;color:var(--slate-500);"></p>
+              </div>
+            </div>
+            <span class="badge-green" style="font-size:.8rem;">✓ Selected</span>
+          </div>
+
+          <div id="progress-section" style="display:none" class="card mt-4">
+            <div class="step-row">
+              <span id="step-label">Processing...</span>
+              <span id="step-pct">0%</span>
+            </div>
+            <div class="progress-track" style="margin-top:.5rem;">
+              <div class="progress-fill" id="upload-progress-bar" style="width:0%"></div>
+            </div>
+            <div class="step-dots mt-2" id="step-dots">
+              <div class="step-dot"></div>
+              <div class="step-dot"></div>
+              <div class="step-dot"></div>
+              <div class="step-dot"></div>
+              <div class="step-dot"></div>
+            </div>
+          </div>
+
+          <button class="btn-primary mt-4" style="width:100%;justify-content:center;" id="upload-btn" onclick="processResume()">
+            Upload & Analyse Resume
+          </button>
+        </div>
+
+        <div>
+          <div class="card">
+            <p style="font-size:.85rem;font-weight:700;color:var(--slate-700);">Supported formats</p>
+            <div class="tags mt-2">
+              <span class="tag tag-blue">PDF</span>
+              <span class="tag tag-blue">DOCX</span>
+              <span class="tag tag-blue">DOC</span>
+              <span class="tag tag-blue">TXT</span>
+            </div>
+          </div>
+          <div class="card mt-4">
+            <p style="font-size:.85rem;font-weight:700;color:var(--slate-700);">Extracted skills preview</p>
+            <div class="tags mt-2" id="preview-skills">
+              <span class="tag tag-blue">React</span>
+              <span class="tag tag-blue">SQL</span>
+              <span class="tag tag-blue">Communication</span>
+              <span class="tag tag-blue">Leadership</span>
+            </div>
+          </div>
+          <div class="card mt-4" id="resume-result-card" style="display:none;">
+            <p style="font-size:.85rem;font-weight:700;color:var(--emerald-700);">✓ Analysis Complete</p>
+            <div style="margin-top:.75rem;font-size:.875rem;color:var(--slate-700);">
+              <p>Match Score: <strong id="result-score"></strong></p>
+              <p style="margin-top:.25rem;">Skills found: <strong id="result-skill-count"></strong></p>
+            </div>
+            <button class="btn-primary btn-sm mt-4" onclick="navigate('recommendations')">View Recommendations →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ====== RECOMMENDATIONS ====== -->
+<div class="page" id="page-recommendations">
+  <main>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p class="section-eyebrow">AI Matches</p>
+        <h1 class="section-title">Recommended Internships</h1>
+        <p class="section-sub">Personalized matches built from your extracted skills and profile.</p>
+      </div>
+      <button class="btn-primary" id="gen-btn" onclick="generateRecommendations()">✨ Generate New Matches</button>
+    </div>
+
+    <div id="rec-alert" style="display:none" class="alert alert-info mt-4"></div>
+    <div id="rec-empty" class="card mt-6" style="text-align:center;padding:3rem;display:none;">
+      <div style="font-size:3rem;">💼</div>
+      <h2 style="margin-top:.75rem;font-size:1.4rem;font-weight:700;">No matches yet</h2>
+      <p style="margin-top:.5rem;color:var(--slate-500);">Upload your resume first to get AI-powered recommendations.</p>
+      <div style="display:flex;gap:.75rem;justify-content:center;margin-top:1.25rem;">
+        <button class="btn-primary" onclick="navigate('resume')">Upload Resume</button>
+        <button class="btn-ghost" onclick="generateRecommendations()">Generate Demo Matches</button>
+      </div>
+    </div>
+    <div id="rec-list" class="mt-6" style="display:flex;flex-direction:column;gap:1.5rem;"></div>
+  </main>
+</div>
+
+<!-- ====== APPLICATIONS ====== -->
+<div class="page" id="page-applications">
+  <main>
+    <p class="section-eyebrow">Application Tracker</p>
+    <h1 class="section-title">My Applications</h1>
+    <p class="section-sub">Monitor every stage of your internship journey from submission to selection.</p>
+
+    <div id="apps-empty" class="card mt-6" style="text-align:center;padding:3rem;display:none;">
+      <div style="font-size:3rem;">📋</div>
+      <h2 style="margin-top:.75rem;font-size:1.4rem;font-weight:700;">No applications yet</h2>
+      <p style="margin-top:.5rem;color:var(--slate-500);">Apply to internships from the Recommendations page.</p>
+      <button class="btn-primary mt-4" onclick="navigate('recommendations')">View Recommendations</button>
+    </div>
+    <div id="apps-list" class="mt-6" style="display:flex;flex-direction:column;gap:1.5rem;"></div>
+  </main>
+</div>
+
+<!-- ====== PROFILE ====== -->
+<div class="page" id="page-profile">
+  <main style="max-width:800px;">
+    <p class="section-eyebrow">Student Profile</p>
+    <h1 class="section-title">My Profile</h1>
+    <p class="section-sub">Keep your profile complete for better internship matches.</p>
+
+    <div id="profile-alert" style="display:none" class="alert mt-4"></div>
+
+    <div class="card mt-6">
+      <div class="form-grid">
+        <div class="form-grid form-row-2">
+          <div class="form-group">
+            <label class="form-label">Full Name</label>
+            <input class="form-input" id="p-name" placeholder="Priya Sharma" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input class="form-input" id="p-phone" placeholder="+91 98765 43210" />
+          </div>
+        </div>
+        <div class="form-grid form-row-2">
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input class="form-input" id="p-city" placeholder="Mumbai" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">State</label>
+            <input class="form-input" id="p-state" placeholder="Maharashtra" />
+          </div>
+        </div>
+        <div class="form-grid form-row-2">
+          <div class="form-group">
+            <label class="form-label">Country</label>
+            <input class="form-input" id="p-country" placeholder="India" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Education</label>
+            <input class="form-input" id="p-edu" placeholder="B.Tech Computer Science, 2026" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Interests / Skills (comma-separated)</label>
+          <input class="form-input" id="p-interests" placeholder="React, Python, Data Analysis, Communication" />
+        </div>
+      </div>
+
+      <div class="completion-bar-section mt-6">
+        <div class="completion-row">
+          <span>Profile completion</span>
+          <span id="profile-completion-pct">0%</span>
+        </div>
+        <div class="progress-track" style="margin-top:.5rem;">
+          <div class="progress-fill" id="profile-completion-bar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:.75rem;margin-top:1.5rem;flex-wrap:wrap;">
+        <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+        <button class="btn-ghost" onclick="navigate('dashboard')">Back to Dashboard</button>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ====== SKILL GAP ====== -->
+<div class="page" id="page-skillgap">
+  <main>
+    <p class="section-eyebrow">Career Analysis</p>
+    <h1 class="section-title">Skill Gap Analysis</h1>
+    <p class="section-sub">Understand exactly what skills you have and what to learn next.</p>
+    <div id="skillgap-body" class="mt-6"></div>
+  </main>
+</div>
+
+<!-- ====== INTERNSHIP LISTINGS ====== -->
+<div class="page" id="page-internships">
+  <main>
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+      <div>
+        <p class="section-eyebrow">Browse All</p>
+        <h1 class="section-title">Internship Listings</h1>
+        <p class="section-sub">All available opportunities. Upload your resume to see match scores.</p>
+      </div>
+      <div style="display:flex;gap:.75rem;">
+        <input class="form-input" id="search-input" placeholder="Search by skill, role, company..." style="width:240px;" oninput="renderListings()">
+      </div>
+    </div>
+    <div id="listings-grid" class="mt-6" style="display:flex;flex-direction:column;gap:1.25rem;"></div>
+  </main>
+</div>
+
+<script>
+// ========================
+// STATE & PERSISTENCE
+// ========================
+const STORAGE_KEY = 'pm-ai-demo-state-v2';
+
+const defaultState = {
+  profile: { name:'', phone:'', city:'', state:'', country:'', education:'', interests:'' },
+  resume: { fileName:'', extractedSkills:[], missingSkills:[], matchScore:0, education:'', processedAt:'' },
+  recommendations: [],
+  applications: []
+};
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return JSON.parse(JSON.stringify(defaultState));
+    const parsed = JSON.parse(saved);
+    return {
+      profile: { ...defaultState.profile, ...parsed.profile },
+      resume: { ...defaultState.resume, ...parsed.resume },
+      recommendations: parsed.recommendations || [],
+      applications: parsed.applications || []
+    };
+  } catch { return JSON.parse(JSON.stringify(defaultState)); }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+let state = loadState();
+
+function resetDemo() {
+  if (!confirm('Reset all demo data? This will clear your resume, skills, recommendations, and applications.')) return;
+  state = JSON.parse(JSON.stringify(defaultState));
+  saveState();
+  navigate('home');
+  showToast('Demo data reset.');
+}
+
+// ========================
+// NAVIGATION
+// ========================
+const PAGES = ['home','dashboard','resume','recommendations','applications','profile','skillgap','internships'];
+
+function navigate(page) {
+  PAGES.forEach(p => {
+    const el = document.getElementById('page-' + p);
+    if (el) el.classList.toggle('active', p === page);
+  });
+  window.scrollTo(0, 0);
+  if (page === 'dashboard') renderDashboard();
+  if (page === 'recommendations') renderRecommendations();
+  if (page === 'applications') renderApplications();
+  if (page === 'profile') renderProfileForm();
+  if (page === 'skillgap') renderSkillGap();
+  if (page === 'internships') renderListings();
+}
+
+// ========================
+// TOAST
+// ========================
+let toastTimer;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 3200);
+}
+
+// ========================
+// INTERNSHIP DATABASE
+// ========================
+const INTERNSHIPS = [
+  { id:'int-1', title:'Frontend Developer Intern', company:'Digital India Mission', location:'Delhi', stipend:'₹15,000/mo', duration:'3 months', requiredSkills:['React','JavaScript','HTML','CSS','UI/UX'], category:'Technology', description:'Build responsive web interfaces for government portals and citizen-facing applications.' },
+  { id:'int-2', title:'Data Analyst Intern', company:'Startup India Hub', location:'Bengaluru', stipend:'₹18,000/mo', duration:'4 months', requiredSkills:['SQL','Python','Data Analysis','Excel','Communication'], category:'Data Science', description:'Analyze startup ecosystem data to generate actionable insights for policy makers.' },
+  { id:'int-3', title:'Product Research Intern', company:'NITI Aayog', location:'New Delhi', stipend:'₹12,000/mo', duration:'3 months', requiredSkills:['Research','Problem Solving','Leadership','Presentation','MS Office'], category:'Policy', description:'Conduct policy research and assist in drafting national development strategy documents.' },
+  { id:'int-4', title:'Machine Learning Intern', company:'IIT Research Lab', location:'Hyderabad', stipend:'₹22,000/mo', duration:'6 months', requiredSkills:['Python','Machine Learning','TensorFlow','Statistics','Data Analysis'], category:'AI/ML', description:'Develop and fine-tune ML models for agricultural yield prediction.' },
+  { id:'int-5', title:'Full Stack Developer Intern', company:'FinTech Bharat', location:'Mumbai', stipend:'₹20,000/mo', duration:'4 months', requiredSkills:['Node.js','React','MongoDB','REST API','TypeScript'], category:'Technology', description:'Build and maintain a payment infrastructure serving 2M+ monthly transactions.' },
+  { id:'int-6', title:'UX Design Intern', company:'Creative India Studio', location:'Pune', stipend:'₹14,000/mo', duration:'3 months', requiredSkills:['Figma','UI/UX','Prototyping','User Research','Adobe XD'], category:'Design', description:'Design intuitive interfaces for mobile-first consumer applications.' },
+  { id:'int-7', title:'Marketing Analytics Intern', company:'Reliance Digital', location:'Mumbai', stipend:'₹16,000/mo', duration:'3 months', requiredSkills:['Excel','Data Analysis','Communication','Google Analytics','SQL'], category:'Marketing', description:'Analyse campaign performance data and produce weekly executive reports.' },
+  { id:'int-8', title:'Backend Engineer Intern', company:'Zoho Corp', location:'Chennai', stipend:'₹25,000/mo', duration:'6 months', requiredSkills:['Java','Spring Boot','MySQL','REST API','Docker'], category:'Technology', description:'Develop microservices for Zoho\'s CRM suite used by 80M+ businesses worldwide.' },
+  { id:'int-9', title:'Cloud Infrastructure Intern', company:'Amazon India', location:'Bengaluru', stipend:'₹30,000/mo', duration:'4 months', requiredSkills:['AWS','Docker','Linux','Python','Cloud Computing'], category:'Cloud', description:'Automate cloud resource provisioning and cost optimisation across AWS environments.' },
+  { id:'int-10', title:'Cybersecurity Intern', company:'CERT-IN', location:'Delhi', stipend:'₹13,000/mo', duration:'3 months', requiredSkills:['Cybersecurity','Networking','Linux','Python','Risk Assessment'], category:'Security', description:'Assist in vulnerability assessments and incident response for national infrastructure.' },
+  { id:'int-11', title:'Business Development Intern', company:'Infosys BPM', location:'Mysuru', stipend:'₹11,000/mo', duration:'3 months', requiredSkills:['Communication','Leadership','MS Office','Presentation','Problem Solving'], category:'Business', description:'Support client acquisition campaigns and manage CRM pipelines for enterprise accounts.' },
+  { id:'int-12', title:'Mobile App Developer Intern', company:'Paytm Labs', location:'Noida', stipend:'₹20,000/mo', duration:'4 months', requiredSkills:['Flutter','Dart','React Native','Mobile Development','API Integration'], category:'Technology', description:'Build cross-platform payment features within the Paytm super-app ecosystem.' },
+];
+
+// ========================
+// SKILL EXTRACTION ENGINE
+// ========================
+const SKILL_KEYWORDS = {
+  // Tech
+  'javascript':['JavaScript','JS'], 'typescript':['TypeScript','TS'], 'react':['React','React.js'],
+  'vue':['Vue.js','Vue'], 'angular':['Angular'], 'node':['Node.js','NodeJS'], 'python':['Python'],
+  'java':['Java'], 'kotlin':['Kotlin'], 'swift':['Swift'], 'c++':['C++'], 'c#':['C#'],
+  'go':['Go','Golang'], 'rust':['Rust'], 'php':['PHP'], 'ruby':['Ruby'], 'scala':['Scala'],
+  'sql':['SQL'], 'mysql':['MySQL'], 'postgresql':['PostgreSQL'], 'mongodb':['MongoDB'],
+  'redis':['Redis'], 'graphql':['GraphQL'], 'rest api':['REST API'], 'api':['API Integration'],
+  'docker':['Docker'], 'kubernetes':['Kubernetes'], 'aws':['AWS'], 'azure':['Azure'],
+  'gcp':['Google Cloud'], 'cloud':['Cloud Computing'], 'linux':['Linux'], 'git':['Git'],
+  'html':['HTML'], 'css':['CSS'], 'sass':['SASS/SCSS'], 'tailwind':['Tailwind CSS'],
+  'figma':['Figma'], 'adobe':['Adobe XD'], 'ui/ux':['UI/UX'], 'ux':['UX Design'],
+  'machine learning':['Machine Learning','ML'], 'deep learning':['Deep Learning'],
+  'tensorflow':['TensorFlow'], 'pytorch':['PyTorch'], 'nlp':['NLP'],
+  'data analysis':['Data Analysis'], 'data science':['Data Science'], 'pandas':['Pandas'],
+  'numpy':['NumPy'], 'tableau':['Tableau'], 'power bi':['Power BI'], 'excel':['Excel'],
+  'flutter':['Flutter'], 'dart':['Dart'], 'react native':['React Native'],
+  'spring':['Spring Boot'], 'django':['Django'], 'flask':['Flask'], 'fastapi':['FastAPI'],
+  'next':['Next.js'], 'express':['Express.js'], 'nestjs':['NestJS'],
+  'cybersecurity':['Cybersecurity'], 'networking':['Networking'], 'devops':['DevOps'],
+  'agile':['Agile'], 'scrum':['Scrum'], 'jira':['Jira'], 'figma':['Figma'],
+  // Soft skills
+  'communication':['Communication'], 'leadership':['Leadership'], 'teamwork':['Teamwork'],
+  'problem solving':['Problem Solving'], 'critical thinking':['Critical Thinking'],
+  'research':['Research'], 'presentation':['Presentation'], 'management':['Project Management'],
+  'ms office':['MS Office'], 'microsoft office':['MS Office'], 'word':['MS Word'],
+  'statistics':['Statistics'], 'analytical':['Analytical Thinking'],
+};
+
+function extractSkillsFromText(text) {
+  const lower = text.toLowerCase();
+  const found = new Set();
+  for (const [keyword, labels] of Object.entries(SKILL_KEYWORDS)) {
+    if (lower.includes(keyword)) labels.forEach(l => found.add(l));
+  }
+  // Also look for capitalized words that might be skill names
+  const words = text.match(/\b[A-Z][a-zA-Z+#.]+\b/g) || [];
+  const commonWords = new Set(['The','This','That','With','From','Have','Been','Will','Your','Our','For','And','But','Not','You','All','Can','Are','Has','Was','Were','They','Their','When','What','How']);
+  words.forEach(w => {
+    if (!commonWords.has(w) && w.length > 2 && w.length < 20) {
+      const lower = w.toLowerCase();
+      if (SKILL_KEYWORDS[lower]) SKILL_KEYWORDS[lower].forEach(l => found.add(l));
+    }
+  });
+  return Array.from(found).slice(0, 14);
+}
+
+function computeMatchScore(skills) {
+  const base = 55;
+  const bonus = Math.min(40, skills.length * 3.5);
+  return Math.round(base + bonus + Math.random() * 5);
+}
+
+function computeMissingSkills(extracted) {
+  const all = ['Python','SQL','Public Speaking','API Design','Figma','Cloud Computing','Docker','TypeScript'];
+  return all.filter(s => !extracted.includes(s)).slice(0, 3);
+}
+
+function generateRecommendationsFromSkills(skills) {
+  return INTERNSHIPS.map(int => {
+    const matched = int.requiredSkills.filter(s => skills.some(es => es.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(es.toLowerCase())));
+    const missing = int.requiredSkills.filter(s => !matched.includes(s));
+    const score = Math.round(20 + (matched.length / int.requiredSkills.length) * 75 + Math.random() * 5);
+    return { ...int, matchScore: Math.min(99, score), requiredSkills: int.requiredSkills, missingSkills: missing, matchedSkills: matched, aiReason: generateReason(matched, int.title) };
+  }).sort((a,b) => b.matchScore - a.matchScore).slice(0, 6);
+}
+
+function generateReason(matched, title) {
+  const reasons = [
+    `Strong alignment with your ${matched.slice(0,2).join(' and ')} background makes you a great fit for this ${title} role.`,
+    `Your experience with ${matched[0] || 'core skills'} directly supports the primary requirements of this position.`,
+    `This role rewards your ${matched.slice(0,2).join(' and ')} skills, giving you an excellent entry point.`,
+    `Based on your skill profile, you meet ${matched.length} of the key requirements — this is a high-probability match.`,
+  ];
+  return reasons[Math.floor(Math.random() * reasons.length)];
+}
+
+// ========================
+// FILE PROCESSING
+// ========================
+let selectedFile = null;
+let processingInterval = null;
+
+function handleFileSelect(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  selectedFile = file;
+  document.getElementById('file-name').textContent = file.name;
+  document.getElementById('file-size').textContent = (file.size / 1024).toFixed(1) + ' KB';
+  document.getElementById('file-row').style.display = 'flex';
+  document.getElementById('resume-alert').style.display = 'none';
+  document.getElementById('resume-result-card').style.display = 'none';
+}
+
+// Drag & drop
+const uploadZone = document.getElementById('upload-zone');
+uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag'); });
+uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag'));
+uploadZone.addEventListener('drop', e => {
+  e.preventDefault(); uploadZone.classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) { selectedFile = file; handleFileSelect({ target: { files: [file] } }); }
+});
+
+const STEP_LABELS = ['Parsing resume...','Extracting skills...','Analysing education...','Calculating match score...','Generating recommendations...'];
+
+async function processResume() {
+  if (!selectedFile) { showAlert('resume-alert', 'error', 'Please select a resume file first.'); return; }
+
+  const btn = document.getElementById('upload-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Processing...';
+  document.getElementById('progress-section').style.display = 'block';
+  document.getElementById('resume-alert').style.display = 'none';
+  document.getElementById('resume-result-card').style.display = 'none';
+
+  // Show AI overlay animation
+  showAIOverlay();
+
+  let step = 0, pct = 0;
+  clearInterval(processingInterval);
+  processingInterval = setInterval(() => {
+    pct = Math.min(95, pct + Math.random() * 14 + 5);
+    step = Math.min(4, Math.floor(pct / 20));
+    document.getElementById('step-label').textContent = STEP_LABELS[step];
+    document.getElementById('step-pct').textContent = Math.round(pct) + '%';
+    document.getElementById('upload-progress-bar').style.width = pct + '%';
+    const dots = document.querySelectorAll('.step-dot');
+    dots.forEach((d, i) => d.classList.toggle('active', i <= step));
+  }, 280);
+
+  try {
+    let text = '';
+    const ext = selectedFile.name.split('.').pop().toLowerCase();
+
+    if (ext === 'pdf') {
+      text = await extractPDFText(selectedFile);
+    } else if (ext === 'txt') {
+      text = await selectedFile.text();
+    } else {
+      // For DOCX/DOC, read what we can as text
+      text = await selectedFile.text().catch(() => '');
+      // Try to pull readable content
+      if (!text || text.length < 20) text = selectedFile.name + ' ' + (state.profile.interests || '');
+    }
+
+    // Fallback if text empty
+    if (!text || text.length < 30) {
+      text = `${selectedFile.name} software developer react javascript python sql communication leadership problem solving data analysis typescript node.js`;
+    }
+
+    await new Promise(r => setTimeout(r, 1200));
+
+    const skills = extractSkillsFromText(text);
+    const finalSkills = skills.length > 0 ? skills : ['JavaScript','Communication','Problem Solving','Leadership','Research'];
+    const matchScore = computeMatchScore(finalSkills);
+    const missing = computeMissingSkills(finalSkills);
+    const recommendations = generateRecommendationsFromSkills(finalSkills);
+
+    clearInterval(processingInterval);
+    document.getElementById('upload-progress-bar').style.width = '100%';
+    document.getElementById('step-pct').textContent = '100%';
+    document.getElementById('step-label').textContent = 'Complete!';
+    document.querySelectorAll('.step-dot').forEach(d => d.classList.add('active'));
+
+    state.resume = {
+      fileName: selectedFile.name,
+      extractedSkills: finalSkills,
+      missingSkills: missing,
+      matchScore,
+      education: state.profile.education || 'Degree detected',
+      processedAt: new Date().toISOString()
+    };
+    state.recommendations = recommendations;
+    if (!state.profile.name) state.profile.name = selectedFile.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+    saveState();
+
+    // Update preview
+    const previewEl = document.getElementById('preview-skills');
+    previewEl.innerHTML = finalSkills.map(s => `<span class="tag tag-green">${s}</span>`).join('');
+
+    document.getElementById('result-score').textContent = matchScore + '%';
+    document.getElementById('result-skill-count').textContent = finalSkills.length;
+    document.getElementById('resume-result-card').style.display = 'block';
+    showAlert('resume-alert', 'success', `Resume processed! Extracted ${finalSkills.length} skills with a ${matchScore}% match score.`);
+    showToast('Resume analysed — ' + finalSkills.length + ' skills found!');
+
+    // Hide AI overlay and show analysis modal
+    setTimeout(() => {
+      hideAIOverlay();
+      setTimeout(() => showResumeModal(finalSkills, missing, matchScore, recommendations, selectedFile.name), 300);
+    }, 600);
+
+  } catch(e) {
+    clearInterval(processingInterval);
+    hideAIOverlay();
+    showAlert('resume-alert', 'error', 'Could not read file. Please try a plain-text or PDF resume.');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = 'Upload & Analyse Resume';
+    setTimeout(() => { document.getElementById('progress-section').style.display = 'none'; }, 1500);
+  }
+}
+
+async function extractPDFText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdfjsLib = window['pdfjs-dist/build/pdf'];
+  if (!pdfjsLib) throw new Error('PDF.js not loaded');
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let fullText = '';
+  for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    fullText += content.items.map(item => item.str).join(' ') + '\n';
+  }
+  return fullText;
+}
+
+// ========================
+// DASHBOARD RENDER
+// ========================
+function renderDashboard() {
+  const { profile, resume, recommendations, applications } = state;
+  const name = profile.name || 'Student';
+  document.getElementById('dash-welcome').textContent = `Welcome back, ${name}`;
+  document.getElementById('dash-name').textContent = name;
+  document.getElementById('dash-edu').textContent = profile.education || resume.education || 'Education pending';
+  const initials = name.split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase() || 'ST';
+  document.getElementById('dash-initials').textContent = initials;
+
+  // Stats
+  const score = resume.matchScore || 0;
+  document.getElementById('stat-score').textContent = score + '%';
+  document.getElementById('stat-score-sub').innerHTML = score > 0 ? `<span class="badge-green">Live from resume</span>` : `<span class="badge-blue">Awaiting analysis</span>`;
+
+  const skillCount = resume.extractedSkills.length;
+  document.getElementById('stat-skills').textContent = skillCount;
+  document.getElementById('stat-skills-sub').innerHTML = skillCount > 0 ? `<span class="badge-green">Updated ${formatDate(resume.processedAt)}</span>` : `<span class="badge-amber">No resume uploaded</span>`;
+
+  document.getElementById('stat-matches').textContent = recommendations.length;
+  document.getElementById('stat-matches-sub').innerHTML = recommendations.length > 0 ? `<span class="badge-green">Tailored to your profile</span>` : `<span class="badge-amber">Ready to generate</span>`;
+
+  document.getElementById('stat-apps').textContent = applications.length;
+  document.getElementById('stat-apps-sub').innerHTML = applications.length > 0 ? `<span class="badge-green">Live tracking</span>` : `<span class="badge-blue">No applications yet</span>`;
+
+  // Skills
+  const skillsEl = document.getElementById('dash-skills-tags');
+  if (resume.extractedSkills.length > 0) {
+    skillsEl.innerHTML = resume.extractedSkills.map(s => `<span class="tag tag-blue">${s}</span>`).join('');
+  } else {
+    skillsEl.innerHTML = `<span style="color:var(--slate-500);font-size:.875rem;">Upload your resume to extract skills.</span>`;
+  }
+
+  const strengths = resume.extractedSkills.length > 0 ? resume.extractedSkills.slice(0,4) : ['Communication','Leadership','Problem Solving'];
+  document.getElementById('dash-strengths').innerHTML = strengths.map(s => `<span class="tag tag-green">${s}</span>`).join('');
+
+  const missing = resume.missingSkills.length > 0 ? resume.missingSkills : ['Python','SQL','Figma'];
+  document.getElementById('dash-missing').innerHTML = missing.map(s => `<span class="tag tag-amber">${s}</span>`).join('');
+
+  // Completion
+  const fields = [profile.name, profile.education, profile.phone, profile.city, profile.country, profile.interests];
+  const pct = Math.round(fields.filter(Boolean).length / fields.length * 100);
+  document.getElementById('dash-completion-pct').textContent = pct + '%';
+  document.getElementById('dash-completion-bar').style.width = pct + '%';
+
+  // Profile strength meter
+  updateStrengthMeter();
+}
+
+// ========================
+// RECOMMENDATIONS RENDER
+// ========================
+function renderRecommendations() {
+  const list = state.recommendations;
+  const listEl = document.getElementById('rec-list');
+  const emptyEl = document.getElementById('rec-empty');
+  const alertEl = document.getElementById('rec-alert');
+
+  if (list.length === 0) {
+    listEl.innerHTML = '';
+    listEl.style.display = 'none';
+    emptyEl.style.display = 'block';
+    if (state.resume.extractedSkills.length === 0) {
+      alertEl.style.display = 'block';
+      alertEl.textContent = 'ℹ Upload your resume first to get skill-matched recommendations.';
+    } else {
+      alertEl.style.display = 'none';
+    }
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  alertEl.style.display = 'none';
+  listEl.style.display = 'flex';
+  listEl.innerHTML = list.map(item => buildRecCard(item)).join('');
+}
+
+function buildRecCard(item) {
+  const score = Math.min(99, item.matchScore || 0);
+  const r = 46, circ = 2 * Math.PI * r;
+  const offset = circ - (score / 100) * circ;
+  const isApplied = state.applications.some(a => a.id === item.id);
+
+  // Company logo
+  const companyInitials = item.company.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const logoColors = ['#0F4C81','#138808','#0ea5e9','#6d28d9','#b91c1c','#b45309'];
+  const logoColor = logoColors[Math.abs(item.company.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % logoColors.length];
+
+  // Why recommended bullets
+  const whyItems = [];
+  if ((item.matchedSkills||[]).length > 0) whyItems.push(`${item.matchedSkills.length} of your skills match`);
+  if (score >= 80) whyItems.push('High-probability match');
+  if (score >= 70) whyItems.push('Strong role alignment');
+  whyItems.push(`${item.category} matches your profile`);
+  if ((item.missingSkills||[]).length <= 1) whyItems.push('Near-complete skill coverage');
+
+  return `
+  <article class="internship-card">
+    <div class="internship-header">
+      <div style="display:flex;align-items:flex-start;gap:.85rem;">
+        <div class="company-logo-badge" style="background:${logoColor};color:#fff;font-size:1rem;">${companyInitials}</div>
+        <div>
+          <div style="display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;">
+            <h2 class="internship-title">${item.title}</h2>
+            <span class="badge-green" style="font-size:.8rem;">${item.location}</span>
+          </div>
+          <p class="internship-company">${item.company}</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:1rem;">
+        <div class="match-ring">
+          <svg width="96" height="96" style="transform:rotate(-90deg)">
+            <circle cx="48" cy="48" r="${r}" stroke="#e2e8f0" stroke-width="10" fill="none"/>
+            <circle cx="48" cy="48" r="${r}" stroke="var(--primary)" stroke-width="10" fill="none"
+              stroke-dasharray="${circ}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+          </svg>
+          <span>${score}%</span>
+        </div>
+        <button class="btn-primary ${isApplied ? 'btn-ghost' : ''}" onclick="applyTo('${item.id}', this)" ${isApplied ? 'style="background:var(--emerald);border-color:var(--emerald);"' : ''}>
+          ${isApplied ? 'Applied' : 'Apply Now'}
+        </button>
+      </div>
+    </div>
+
+    <!-- WHY RECOMMENDED -->
+    <div class="why-rec-section">
+      <p class="why-rec-title">Why Recommended</p>
+      <div class="why-rec-items">
+        ${whyItems.slice(0,4).map(w => `<span class="why-rec-pill"><span class="dot"></span>${w}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="internship-body">
+      <div>
+        <p style="font-size:.85rem;font-weight:700;color:var(--slate-700);">AI Reasoning</p>
+        <p style="margin-top:.5rem;font-size:.875rem;color:var(--slate-500);line-height:1.6;">${item.aiReason}</p>
+      </div>
+      <div>
+        <p style="font-size:.85rem;font-weight:700;color:var(--slate-700);">Matched skills</p>
+        <div class="tags">
+          ${(item.matchedSkills || item.requiredSkills || []).map(s => `<span class="tag tag-green">${s}</span>`).join('')}
+        </div>
+      </div>
+    </div>
+
+    <div class="skills-pair mt-4">
+      <div class="skill-box">
+        <h4>Required Skills</h4>
+        <div class="tags">${(item.requiredSkills||[]).map(s => `<span class="tag tag-blue">${s}</span>`).join('')}</div>
+      </div>
+      <div class="skill-box amber">
+        <h4>Missing Skills</h4>
+        <div class="tags">${(item.missingSkills||[]).map(s => `<span class="tag tag-amber">${s}</span>`).join('')}</div>
+      </div>
+    </div>
+  </article>`;
+}
+
+function applyTo(id, btn) {
+  if (state.applications.some(a => a.id === id)) { showToast('Already applied to this internship.'); return; }
+  const rec = state.recommendations.find(r => r.id === id) || INTERNSHIPS.find(i => i.id === id);
+  if (!rec) return;
+  state.applications.unshift({
+    id: rec.id, title: rec.title, company: rec.company,
+    location: rec.location, status: 'Applied',
+    appliedAt: new Date().toISOString()
+  });
+  saveState();
+  btn.textContent = '✓ Applied';
+  btn.style.background = 'var(--emerald)';
+  btn.disabled = true;
+  showToast(`Applied to ${rec.title} at ${rec.company}!`);
+  // Update dashboard stat live
+  document.getElementById('stat-apps').textContent = state.applications.length;
+}
+
+function generateRecommendations() {
+  const btn = document.getElementById('gen-btn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Generating...';
+
+  setTimeout(() => {
+    const skills = state.resume.extractedSkills.length > 0
+      ? state.resume.extractedSkills
+      : ['Communication','Leadership','Problem Solving','Research'];
+    state.recommendations = generateRecommendationsFromSkills(skills);
+    saveState();
+    renderRecommendations();
+    btn.disabled = false;
+    btn.innerHTML = '✨ Generate New Matches';
+    showToast(state.recommendations.length + ' recommendations generated!');
+  }, 1200);
+}
+
+// ========================
+// APPLICATIONS RENDER
+// ========================
+const STATUS_ORDER = ['Applied','Under Review','Shortlisted','Interview','Selected'];
+const STATUS_STYLES = {
+  'Applied': 'badge-blue',
+  'Under Review': 'badge-amber',
+  'Shortlisted': 'badge-indigo',
+  'Interview': 'badge-indigo',
+  'Selected': 'badge-green',
+};
+
+function renderApplications() {
+  const apps = state.applications;
+  const listEl = document.getElementById('apps-list');
+  const emptyEl = document.getElementById('apps-empty');
+
+  if (apps.length === 0) {
+    listEl.innerHTML = '';
+    emptyEl.style.display = 'block';
+    return;
+  }
+  emptyEl.style.display = 'none';
+  listEl.innerHTML = apps.map(app => buildAppCard(app)).join('');
+}
+
+function buildAppCard(app) {
+  const statusIdx = Math.max(0, STATUS_ORDER.indexOf(app.status));
+  const pct = ((statusIdx + 1) / STATUS_ORDER.length) * 100;
+  const badgeClass = STATUS_STYLES[app.status] || 'badge-blue';
+  const companyInitials = app.company.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const logoColors = ['#0F4C81','#138808','#FF9933','#0ea5e9','#6d28d9','#b91c1c'];
+  const logoColor = logoColors[Math.abs(app.company.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % logoColors.length];
+
+  // Build timeline dates
+  const appliedDate = new Date(app.appliedAt || Date.now());
+  const timelineItems = STATUS_ORDER.map((stage, i) => {
+    let dateStr = '';
+    let state = 'pending';
+    if (i < statusIdx) { state = 'done'; dateStr = formatDate(new Date(appliedDate.getTime() + i * 2 * 86400000).toISOString()); }
+    else if (i === statusIdx) { state = 'current'; dateStr = formatDate(app.appliedAt); }
+    return { stage, state, dateStr };
+  });
+
+  return `
+  <section class="card">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:1rem;">
+      <div style="display:flex;align-items:center;gap:.85rem;">
+        <div class="company-logo-badge" style="background:${logoColor};color:#fff;">${companyInitials}</div>
+        <div>
+          <h2 style="font-size:1.3rem;font-weight:700;">${app.title}</h2>
+          <p style="margin-top:.2rem;font-size:.875rem;color:var(--slate-500);">${app.company} &middot; ${app.location}</p>
+        </div>
+      </div>
+      <span class="${badgeClass}" style="border-radius:999px;padding:.3rem .85rem;font-size:.85rem;font-weight:600;">${app.status}</span>
+    </div>
+
+    <div class="three-info mt-4">
+      <div class="skill-box">
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--slate-500);">Applied Date</p>
+        <p style="margin-top:.5rem;font-size:.875rem;font-weight:700;">${formatDate(app.appliedAt)}</p>
+      </div>
+      <div class="skill-box">
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--slate-500);">Company</p>
+        <p style="margin-top:.5rem;font-size:.875rem;font-weight:700;">${app.company}</p>
+      </div>
+      <div class="skill-box">
+        <p style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.15em;color:var(--slate-500);">Progress</p>
+        <p style="margin-top:.5rem;font-size:.875rem;font-weight:700;">${statusIdx + 1} / ${STATUS_ORDER.length} stages</p>
+      </div>
+    </div>
+
+    <!-- APPLICATION PROGRESS TIMELINE -->
+    <div style="margin-top:1.25rem;">
+      <p style="font-size:.8rem;font-weight:700;color:var(--slate-700);margin-bottom:.75rem;">Application Timeline</p>
+      <div class="app-timeline">
+        ${timelineItems.map(t => `
+        <div class="timeline-item">
+          <div class="timeline-dot ${t.state}"></div>
+          <p class="timeline-label ${t.state}">${t.stage}</p>
+          ${t.dateStr ? `<p class="timeline-date">${t.dateStr}</p>` : '<p class="timeline-date" style="color:var(--slate-300);">Pending</p>'}
+        </div>`).join('')}
+      </div>
+    </div>
+  </section>`;
+}
+
+// ========================
+// PROFILE FORM
+// ========================
+function renderProfileForm() {
+  const p = state.profile;
+  document.getElementById('p-name').value = p.name || '';
+  document.getElementById('p-phone').value = p.phone || '';
+  document.getElementById('p-city').value = p.city || '';
+  document.getElementById('p-state').value = p.state || '';
+  document.getElementById('p-country').value = p.country || '';
+  document.getElementById('p-edu').value = p.education || state.resume.education || '';
+  document.getElementById('p-interests').value = p.interests || state.resume.extractedSkills.join(', ') || '';
+  updateProfileCompletion();
+  ['p-name','p-phone','p-city','p-state','p-country','p-edu','p-interests'].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateProfileCompletion);
+  });
+}
+
+function updateProfileCompletion() {
+  const vals = ['p-name','p-phone','p-city','p-state','p-country','p-edu','p-interests'].map(id => document.getElementById(id).value.trim());
+  const pct = Math.round(vals.filter(Boolean).length / vals.length * 100);
+  document.getElementById('profile-completion-pct').textContent = pct + '%';
+  document.getElementById('profile-completion-bar').style.width = pct + '%';
+}
+
+function saveProfile() {
+  state.profile = {
+    name: document.getElementById('p-name').value.trim(),
+    phone: document.getElementById('p-phone').value.trim(),
+    city: document.getElementById('p-city').value.trim(),
+    state: document.getElementById('p-state').value.trim(),
+    country: document.getElementById('p-country').value.trim(),
+    education: document.getElementById('p-edu').value.trim(),
+    interests: document.getElementById('p-interests').value.trim(),
+  };
+  // If interests updated, re-extract skills from it
+  if (state.profile.interests && state.resume.extractedSkills.length === 0) {
+    state.resume.extractedSkills = extractSkillsFromText(state.profile.interests);
+    state.resume.matchScore = computeMatchScore(state.resume.extractedSkills);
+    state.resume.missingSkills = computeMissingSkills(state.resume.extractedSkills);
+  }
+  saveState();
+  showAlert('profile-alert', 'success', '✓ Profile saved successfully!');
+  showToast('Profile updated!');
+}
+
+// ========================
+// SKILL GAP
+// ========================
+function renderSkillGap() {
+  const container = document.getElementById('skillgap-body');
+  const extracted = state.resume.extractedSkills;
+  const missing = state.resume.missingSkills;
+  const recs = state.recommendations;
+
+  if (extracted.length === 0) {
+    container.innerHTML = `<div class="card" style="text-align:center;padding:3rem;">
+      <div style="font-size:3rem;">🧬</div>
+      <h2 style="margin-top:.75rem;font-size:1.4rem;font-weight:700;">No skills extracted yet</h2>
+      <p style="margin-top:.5rem;color:var(--slate-500);">Upload your resume to see your skill gap analysis.</p>
+      <button class="btn-primary mt-4" onclick="navigate('resume')">Upload Resume</button>
+    </div>`;
+    return;
+  }
+
+  const allRequired = [...new Set(recs.flatMap(r => r.requiredSkills || []))];
+  const allMissing = allRequired.filter(s => !extracted.includes(s));
+
+  container.innerHTML = `
+  <div class="skill-gap-row">
+    <div class="gap-card">
+      <h3>✅ Your Skills (${extracted.length})</h3>
+      <p class="subtitle">Extracted from your resume</p>
+      ${extracted.map((s, i) => {
+        const pct = Math.round(70 + (i % 3) * 10);
+        return `<div class="skill-progress-row">
+          <span class="skill-progress-label">${s}</span>
+          <div class="skill-progress-bar"><div class="skill-progress-fill" style="width:${pct}%;background:var(--emerald);"></div></div>
+          <span class="skill-progress-pct">${pct}%</span>
+        </div>`;
+      }).join('')}
+    </div>
+    <div>
+      <div class="gap-card" style="margin-bottom:1rem;">
+        <h3>⚠️ Missing Skills (${missing.length})</h3>
+        <p class="subtitle">Skills to improve your match score</p>
+        <div class="tags mt-4">
+          ${missing.map(s => `<span class="tag tag-amber">${s}</span>`).join('')}
+        </div>
+      </div>
+      <div class="gap-card">
+        <h3>📈 Match Score</h3>
+        <p class="subtitle">Based on ${recs.length} active recommendations</p>
+        <div style="font-size:3rem;font-weight:800;color:var(--primary);margin-top:.5rem;">${state.resume.matchScore}%</div>
+        <div class="progress-track" style="margin-top:.75rem;">
+          <div class="progress-fill" style="width:${state.resume.matchScore}%"></div>
+        </div>
+        <p style="font-size:.8rem;color:var(--slate-500);margin-top:.5rem;">Add ${missing[0] || 'Python'} to jump +5%</p>
+      </div>
+    </div>
+  </div>
+  ${recs.length > 0 ? `
+  <div class="card mt-6">
+    <p style="font-size:.85rem;font-weight:700;color:var(--slate-700);">Skill gap per recommended internship</p>
+    <div style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem;">
+      ${recs.slice(0,4).map(r => {
+        const matched = (r.matchedSkills || r.requiredSkills || []).filter(s => extracted.includes(s)).length;
+        const total = (r.requiredSkills || []).length;
+        const pct = total > 0 ? Math.round((matched/total)*100) : 50;
+        return `<div>
+          <div style="display:flex;justify-content:space-between;font-size:.85rem;">
+            <span style="font-weight:600;">${r.title} <span style="color:var(--slate-500);font-weight:400;">@ ${r.company}</span></span>
+            <span style="font-weight:700;color:var(--primary);">${pct}% match</span>
+          </div>
+          <div class="progress-track" style="margin-top:.35rem;">
+            <div class="progress-fill" style="width:${pct}%;background:${pct >= 80 ? 'var(--emerald)' : pct >= 60 ? 'var(--accent)' : 'var(--primary)'}"></div>
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>` : ''}`;
+}
+
+// ========================
+// INTERNSHIP LISTINGS
+// ========================
+function renderListings() {
+  const query = (document.getElementById('search-input')?.value || '').toLowerCase();
+  const filtered = INTERNSHIPS.filter(i => {
+    if (!query) return true;
+    return i.title.toLowerCase().includes(query) ||
+      i.company.toLowerCase().includes(query) ||
+      i.category.toLowerCase().includes(query) ||
+      i.requiredSkills.some(s => s.toLowerCase().includes(query));
+  });
+
+  const extracted = state.resume.extractedSkills;
+  const grid = document.getElementById('listings-grid');
+
+  grid.innerHTML = filtered.map(item => {
+    const matchedCount = extracted.length > 0
+      ? item.requiredSkills.filter(s => extracted.some(e => e.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(e.toLowerCase()))).length
+      : 0;
+    const matchPct = extracted.length > 0 ? Math.round((matchedCount / item.requiredSkills.length) * 100) : null;
+    const isApplied = state.applications.some(a => a.id === item.id);
+    const companyInitials = item.company.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+    const logoColors = ['#0F4C81','#138808','#0ea5e9','#6d28d9','#b91c1c','#b45309'];
+    const logoColor = logoColors[Math.abs(item.company.split('').reduce((a,c)=>a+c.charCodeAt(0),0)) % logoColors.length];
+
+    return `
+    <div class="internship-listing-card">
+      <div class="listing-header">
+        <div style="display:flex;align-items:flex-start;gap:.85rem;">
+          <div class="company-logo-badge" style="background:${logoColor};color:#fff;font-size:.9rem;">${companyInitials}</div>
+          <div>
+            <h3 style="font-size:1.2rem;font-weight:700;">${item.title}</h3>
+            <p style="font-size:.875rem;color:var(--slate-500);margin-top:.2rem;">${item.company}</p>
+            <p style="font-size:.85rem;color:var(--slate-700);margin-top:.5rem;">${item.description}</p>
+          </div>
+        </div>
+        ${matchPct !== null ? `<div style="text-align:center;flex-shrink:0;">
+          <div style="font-size:1.5rem;font-weight:800;color:var(--primary);">${matchPct}%</div>
+          <div style="font-size:.7rem;color:var(--slate-500);">match</div>
+        </div>` : ''}
+      </div>
+      <div class="listing-meta">
+        <span class="meta-tag">📍 ${item.location}</span>
+        <span class="meta-tag">⏱ ${item.duration}</span>
+        <span class="meta-tag">🏷 ${item.category}</span>
+      </div>
+      <div class="tags" style="margin-top:.75rem;">
+        ${item.requiredSkills.map(s => {
+          const has = extracted.some(e => e.toLowerCase().includes(s.toLowerCase()) || s.toLowerCase().includes(e.toLowerCase()));
+          return `<span class="tag ${has ? 'tag-green' : 'tag-blue'}">${s}</span>`;
+        }).join('')}
+      </div>
+      <div class="listing-footer">
+        <span class="stipend-badge">💰 ${item.stipend}</span>
+        <div style="display:flex;gap:.75rem;">
+          <button class="btn-ghost btn-sm" onclick="navigate('recommendations')">Details</button>
+          <button class="btn-primary btn-sm" onclick="applyFromListing('${item.id}', this)" ${isApplied ? 'style="background:var(--emerald);"' : ''}>
+            ${isApplied ? '✓ Applied' : 'Apply'}
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function applyFromListing(id, btn) {
+  if (state.applications.some(a => a.id === id)) { showToast('Already applied.'); return; }
+  const item = INTERNSHIPS.find(i => i.id === id);
+  if (!item) return;
+
+  // Auto-generate recommendations if not present
+  if (state.recommendations.length === 0 && state.resume.extractedSkills.length === 0) {
+    state.resume.extractedSkills = ['Communication','Leadership','Problem Solving'];
+    state.recommendations = generateRecommendationsFromSkills(state.resume.extractedSkills);
+  }
+
+  const matchedSkills = item.requiredSkills.filter(s =>
+    state.resume.extractedSkills.some(e => e.toLowerCase().includes(s.toLowerCase()))
+  );
+  const missingSkills = item.requiredSkills.filter(s => !matchedSkills.includes(s));
+
+  state.applications.unshift({ id: item.id, title: item.title, company: item.company, location: item.location, status: 'Applied', appliedAt: new Date().toISOString() });
+  saveState();
+  btn.textContent = '✓ Applied';
+  btn.style.background = 'var(--emerald)';
+  showToast(`Applied to ${item.title}!`);
+}
+
+// ========================
+// HELPERS
+// ========================
+function showAlert(id, type, msg) {
+  const el = document.getElementById(id);
+  el.className = `alert alert-${type === 'error' ? 'error' : 'success'}`;
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function formatDate(iso) {
+  if (!iso) return 'Recently';
+  try { return new Date(iso).toLocaleDateString('en-IN', { day:'numeric', month:'short', year:'numeric' }); }
+  catch { return 'Recently'; }
+}
+
+// ========================
+// INIT
+// ========================
+navigate('home');
+animatePlatformStats();
+
+// ========================
+// PLATFORM STAT COUNTERS
+// ========================
+function animatePlatformStats() {
+  const els = document.querySelectorAll('.count-stat');
+  els.forEach(el => {
+    const target = parseInt(el.dataset.target, 10);
+    const duration = 1800;
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target).toLocaleString('en-IN') + (target >= 1000 ? '+' : target === 94 ? '%' : '');
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+
+// ========================
+// AI OVERLAY CONTROL
+// ========================
+function showAIOverlay() {
+  const overlay = document.getElementById('ai-overlay');
+  overlay.classList.add('active');
+  let pct = 0;
+  const fill = document.getElementById('ai-scan-fill');
+  const steps = document.querySelectorAll('.ai-step-list .ai-step-item');
+
+  // Reset
+  steps.forEach(s => s.classList.remove('done','active'));
+  fill.style.width = '0%';
+
+  const interval = setInterval(() => {
+    pct = Math.min(100, pct + Math.random() * 8 + 4);
+    fill.style.width = pct + '%';
+    const currentStep = Math.min(4, Math.floor(pct / 20));
+    steps.forEach((s, i) => {
+      s.classList.remove('done','active');
+      if (i < currentStep) s.classList.add('done');
+      else if (i === currentStep) s.classList.add('active');
+    });
+    if (pct >= 100) {
+      clearInterval(interval);
+      steps.forEach(s => s.classList.add('done'));
+    }
+  }, 220);
+
+  return interval;
+}
+
+function hideAIOverlay() {
+  document.getElementById('ai-overlay').classList.remove('active');
+}
+
+// ========================
+// RESUME MODAL
+// ========================
+function showResumeModal(skills, missing, score, recs, fileName) {
+  const modal = document.getElementById('resume-modal');
+  document.getElementById('modal-filename').textContent = fileName || 'resume.pdf';
+
+  // Score arc animation
+  const arc = document.getElementById('modal-score-arc');
+  const circ = 226;
+  const offset = circ - (score / 100) * circ;
+  setTimeout(() => { arc.style.transition = 'stroke-dashoffset .9s ease'; arc.style.strokeDashoffset = offset; }, 100);
+  document.getElementById('modal-score-text').textContent = score + '%';
+
+  const scoreDesc = score >= 80 ? 'Excellent match — apply with confidence' :
+    score >= 65 ? 'Good fit — strong application likely' :
+    score >= 50 ? 'Moderate fit — add suggested skills' : 'Building profile — keep adding skills';
+  document.getElementById('modal-score-desc').textContent = scoreDesc;
+
+  document.getElementById('modal-skill-count').textContent = skills.length;
+  document.getElementById('modal-roles-count').textContent = recs.length;
+  document.getElementById('modal-missing-count').textContent = missing.length;
+
+  // Top category
+  const cats = recs.map(r => r.category);
+  const catFreq = cats.reduce((a, c) => { a[c] = (a[c]||0)+1; return a; }, {});
+  const topCat = Object.entries(catFreq).sort((a,b)=>b[1]-a[1])[0]?.[0] || 'Technology';
+  document.getElementById('modal-top-cat').textContent = topCat;
+
+  // Skills
+  document.getElementById('modal-skills-list').innerHTML = skills.map(s => `<span class="tag tag-green">${s}</span>`).join('');
+  document.getElementById('modal-missing-list').innerHTML = missing.map(s => `<span class="tag tag-amber">${s}</span>`).join('');
+
+  // AI text
+  const aiTexts = [
+    `Your resume demonstrates strong alignment with ${topCat} roles. With ${skills.length} skills detected, you rank in the top tier of candidates. Adding ${missing[0] || 'cloud skills'} could increase your match score by an estimated 8–12%.`,
+    `AI analysis identified ${skills.length} skills across technical and soft skill categories. Your strongest domain is ${topCat}, where you matched ${recs.filter(r=>r.category===topCat).length} active listings. Focus on ${missing.slice(0,2).join(' and ')} to unlock premium opportunities.`,
+  ];
+  document.getElementById('modal-ai-text').textContent = aiTexts[Math.floor(Math.random()*aiTexts.length)];
+
+  modal.classList.add('active');
+}
+
+function closeResumeModal() {
+  document.getElementById('resume-modal').classList.remove('active');
+  // Reset arc for next open
+  const arc = document.getElementById('modal-score-arc');
+  arc.style.transition = 'none';
+  arc.style.strokeDashoffset = '226';
+}
+
+// ========================
+// PROFILE STRENGTH METER
+// ========================
+function updateStrengthMeter() {
+  const { profile, resume, applications } = state;
+
+  const profileFields = [profile.name, profile.education, profile.phone, profile.city, profile.country, profile.interests];
+  const profilePct = Math.round(profileFields.filter(Boolean).length / profileFields.length * 100);
+  const resumePct = resume.extractedSkills.length > 0 ? 100 : 0;
+  const skillsPct = Math.min(100, resume.extractedSkills.length * 8);
+  const appsPct = Math.min(100, applications.length * 25);
+
+  const overall = Math.round((profilePct + resumePct + skillsPct + appsPct) / 4);
+
+  // Update arc
+  const arc = document.getElementById('strength-arc');
+  const label = document.getElementById('strength-pct-label');
+  if (arc && label) {
+    const circ = 226;
+    const offset = circ - (overall / 100) * circ;
+    arc.style.strokeDashoffset = offset;
+    arc.style.stroke = overall >= 75 ? 'var(--emerald)' : overall >= 50 ? 'var(--accent)' : 'var(--primary)';
+    label.innerHTML = `${overall}%<small>strength</small>`;
+  }
+
+  // Update bars
+  const bars = { 'sbar-profile': profilePct, 'sbar-resume': resumePct, 'sbar-skills': skillsPct, 'sbar-apps': appsPct };
+  Object.entries(bars).forEach(([id, pct]) => {
+    const el = document.getElementById(id);
+    if (el) el.style.width = pct + '%';
+  });
+}
+</script>
+</body>
+</html>
